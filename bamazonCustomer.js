@@ -62,11 +62,19 @@ let askUser = (items)=>{
 let checkInventory = (item, quantity)=>{
 	connection.query('SELECT * FROM products WHERE product_name = ?;', [item],(err, results)=>{
 			if (err) throw err;
-			if(quantity > results.stock_quantity){
-				console.log(`Sorry man, we're out of stock on this item.`)
+			if(quantity > results[0].stock_quantity){
+				if(results[0].stock_quantity > 0){
+				console.log(`Sorry man, we only have ${results[0].stock_quantity} in stock. Enter a different quantity.`)
+				setTimeout(()=>{displayAllItems(askUser)}, 2000);
+				}else{
+					console.log(`Sorry man, we're out of stock on this item.`);
+					orderChoice();
+				}
+				
 			}else{
 				console.log(`Your total is $${results[0].price_usd}. Thank You For Your Purchase!`);
 				updateInventory(item, quantity);
+				orderChoice();
 
 			}
 		})
@@ -76,4 +84,19 @@ let updateInventory = (item, quantity) => {
     connection.query(`UPDATE products SET stock_quantity = stock_quantity - ? WHERE product_name = ?`, [quantity, item], (err, results) => {
         if (err) throw err;
     })
+}
+
+let orderChoice = ()=>{
+	inquirer.prompt([
+	{
+		type: 'confirm',
+		name: 'orderMore',
+		message: 'Would you like to place another order?'
+	}]).then(answers=>{
+		if(answers.orderMore){
+			displayAllItems(askUser);
+		}else{
+			process.exit();
+		}
+	})
 }
