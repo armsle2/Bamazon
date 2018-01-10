@@ -30,7 +30,7 @@ let displayAllItems = (cb)=>{
 let askUser = (items)=>{
 	inquirer.prompt([
 	{
-		name: 'item_id',
+		name: 'item',
 		type: 'list',
 		choices: ()=>{
 			let itemsArr = [];
@@ -52,10 +52,28 @@ let askUser = (items)=>{
 			}
 		}
 	}
-	])
+	]).then(answers=>{
+		quantity = parseFloat(answers.quantity);
+		item = answers.item.split(' ').slice(1).toString().replace(/,/g, ' ');
+		checkInventory(item, quantity);
+	})
 }
 
-// let checkInventory = (item, quantity)=>{
-// 	connection.query('SELECT'
-// 		)
-// }
+let checkInventory = (item, quantity)=>{
+	connection.query('SELECT * FROM products WHERE product_name = ?;', [item],(err, results)=>{
+			if (err) throw err;
+			if(quantity > results.stock_quantity){
+				console.log(`Sorry man, we're out of stock on this item.`)
+			}else{
+				console.log(`Your total is $${results[0].price_usd}. Thank You For Your Purchase!`);
+				updateInventory(item, quantity);
+
+			}
+		})
+}
+
+let updateInventory = (item, quantity) => {
+    connection.query(`UPDATE products SET stock_quantity = stock_quantity - ? WHERE product_name = ?`, [quantity, item], (err, results) => {
+        if (err) throw err;
+    })
+}
