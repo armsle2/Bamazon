@@ -31,7 +31,7 @@ let displayPrompt = ()=>{
 					}else if(answers.options===`View Low Inventory`){
 						displayLowInventory();
 					}else if(answers.options===`Add To Inventory`){
-						updateItemQuantity(results);
+						updateQuantityPrompt(results);
 					}else if(answers.options===`Add New Product`){
 						addProductPrompt();
 					}
@@ -65,7 +65,7 @@ let displayLowInventory = ()=>{
 	});
 }
 
-let updateItemQuantity = (items) => {
+let updateQuantityPrompt = (items) => {
 	inquirer.prompt([
 	{
 		name: 'item',
@@ -92,12 +92,8 @@ let updateItemQuantity = (items) => {
 	}]).then(answers=>{
 		let quantity = parseFloat(answers.quantity);
 		let item = answers.item.split(`'`)[1];
-		connection.query(`UPDATE products SET stock_quantity = ? WHERE product_name = ?;`, [quantity, item], (err, results) => {
-	        if (err) throw err;
-	        console.log(`The ${item} quantity has been updated to ${quantity}.`);
-	    })
-	})
-    
+		updateQuantity(quantity, item);
+	}) 
 }
 
 let addProductPrompt = ()=>{
@@ -132,8 +128,14 @@ let addProductPrompt = ()=>{
 		let price = parseFloat(answers.price);
 		let quantity = answers.stock;
 		addProducts(item, department, price, quantity);
-	})
-	
+	})	
+}
+
+let updateQuantity = (quantity, item) => {
+    connection.query(`UPDATE products SET stock_quantity = ? WHERE product_name = ?;`, [quantity, item], (err, results) => {
+        if (err) throw err;
+        console.log(`The ${item} quantity has been updated to ${quantity}.`);
+    })
 }
 
 let addProducts = (item, department, price, quantity)=>{
@@ -143,6 +145,3 @@ let addProducts = (item, department, price, quantity)=>{
 	})
 }
 
-let managerFunc = ()=>{
-
-}
