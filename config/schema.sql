@@ -8,4 +8,11 @@ CREATE TABLE products(
 	stock_quantity int,
 	PRIMARY KEY(item_id)
 );
-
+CREATE TABLE departments(
+	department_id int AUTO_INCREMENT,
+	department_name VARCHAR(100),
+	over_head_costs int
+	PRIMARY KEY(department_id)
+);
+ALTER TABLE products
+ADD product_sales int;

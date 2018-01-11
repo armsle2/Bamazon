@@ -53,8 +53,8 @@ let askUser = (items)=>{
 		}
 	}
 	]).then(answers=>{
-		quantity = parseFloat(answers.quantity);
-		item = answers.item.split(`'`)[1];
+		let quantity = parseFloat(answers.quantity);
+		let item = answers.item.split(`'`)[1];
 		checkInventory(item, quantity);
 	})
 }
@@ -72,8 +72,10 @@ let checkInventory = (item, quantity)=>{
 				}
 				
 			}else{
-				console.log(`Your total is $${results[0].price_usd}. Thank You For Your Purchase!`);
+				let price = results[0].price_usd * quantity;
+				console.log(`Your total is $${price}. Thank You For Your Purchase!`);
 				updateInventory(item, quantity);
+				updateItemRevenue(item, price);
 				orderChoice();
 
 			}
@@ -82,6 +84,12 @@ let checkInventory = (item, quantity)=>{
 
 let updateInventory = (item, quantity) => {
     connection.query(`UPDATE products SET stock_quantity = stock_quantity - ? WHERE product_name = ?`, [quantity, item], (err, results) => {
+        if (err) throw err;
+    })
+}
+
+let updateItemRevenue = (item, price)=>{
+	connection.query(`UPDATE products SET product_sales = product_sales + ? WHERE product_name = ?`, [price, item], (err, results) => {
         if (err) throw err;
     })
 }
