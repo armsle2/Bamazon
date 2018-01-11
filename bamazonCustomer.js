@@ -35,7 +35,7 @@ let askUser = (items)=>{
 		choices: ()=>{
 			let itemsArr = [];
 			items.forEach((results, index)=>{
-				itemsArr.push(`${results.item_id} ${results.product_name}`);
+				itemsArr.push(`${results.item_id} '${results.product_name}'`);
 			});
 			return itemsArr;
 		},
@@ -54,7 +54,7 @@ let askUser = (items)=>{
 	}
 	]).then(answers=>{
 		quantity = parseFloat(answers.quantity);
-		item = answers.item.split(' ').slice(1).toString().replace(/,/g, ' ');
+		item = answers.item.split(`'`)[1];
 		checkInventory(item, quantity);
 	})
 }
