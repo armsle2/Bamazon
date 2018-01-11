@@ -10,7 +10,6 @@ const connection = mysql.createConnection({
 
 connection.connect(err=>{
 	if(err) throw err;
-	console.log(`connected`);
 	displayPrompt();
 });
 
@@ -48,6 +47,7 @@ let displayAllItems = ()=>{
 			results.forEach((results, index)=>{
 				console.log('Item: '+results.item_id +'\n'+ 'Product: '+results.product_name+'\n'+ 'Price: $'+results.price_usd+'\n-----------------');
 			});
+			mainMenuPrompt();
 		}
 	});
 }
@@ -61,6 +61,7 @@ let displayLowInventory = ()=>{
 			results.forEach((results, index)=>{
 				console.log('Item: '+results.item_id +'\n'+ 'Product: '+results.product_name+'\n'+ 'Price: $'+results.price_usd+'\n'+ 'Stock: '+results.stock_quantity+'\n-----------------');
 			});
+			mainMenuPrompt();
 		}
 	});
 }
@@ -135,13 +136,30 @@ let updateQuantity = (quantity, item) => {
     connection.query(`UPDATE products SET stock_quantity = ? WHERE product_name = ?;`, [quantity, item], (err, results) => {
         if (err) throw err;
         console.log(`The ${item} quantity has been updated to ${quantity}.`);
-    })
+		mainMenuPrompt();
+
+    });
 }
 
 let addProducts = (item, department, price, quantity)=>{
 	connection.query('INSERT INTO products(product_name, department_name, price_usd, stock_quantity) VALUES(?, ?, ?, ?)', [item, department, price, quantity], (err, results)=>{
 		console.log(`YOU SUCCESSFULLY ADDED A NEW ITEM!`);
 		console.log('Item: '+item +'\n'+ 'Department: '+department+'\n'+ 'Price: $'+price+'\n'+ 'Stock: '+quantity+'\n-----------------');
-	})
+		mainMenuPrompt();
+	});
 }
 
+let mainMenuPrompt = ()=>{
+	inquirer.prompt([
+	{
+		type: 'confirm',
+		name: 'doMore',
+		message: 'Would you like to go back to the main menu?'
+	}]).then(answers=>{
+		if(answers.doMore){
+			displayPrompt();
+		}else{
+			process.exit();
+		}
+	})
+}
