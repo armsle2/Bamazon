@@ -32,8 +32,8 @@ let displayPrompt = ()=>{
 						displayLowInventory();
 					}else if(answers.options===`Add To Inventory`){
 						updateItemQuantity(results);
-					}else if(answers.options===`View Products For Sale`){
-						displayAllItems();
+					}else if(answers.options===`Add New Product`){
+						addProductPrompt();
 					}
 				});
 			}
@@ -98,6 +98,49 @@ let updateItemQuantity = (items) => {
 	    })
 	})
     
+}
+
+let addProductPrompt = ()=>{
+	inquirer.prompt([
+	{
+		name: 'productName',
+		type: 'input',
+		message: 'Please enter the name of the product.'
+	}, {
+		name: 'department',
+		type: 'input',
+		message: 'Please enter the department of the product.'
+	}, {
+		name: 'price',
+		type: 'input',
+		message: 'Please enter the price of the product.(ex 300)',
+		validate: (value)=>{
+			if(!isNaN(value)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}, {
+		name: 'stock',
+		type: 'input',
+		message: 'Please enter the quantity of the product.',
+	}	
+	]).then(answers=>{
+		let item = answers.productName;
+		let department = answers.department;
+		let price = parseFloat(answers.price);
+		let quantity = answers.stock;
+		addProducts(item, department, price, quantity);
+	})
+	
+}
+
+let addProducts = (item, department, price, quantity)=>{
+	connection.query('INSERT INTO products(product_name, department_name, price_usd, stock_quantity) VALUES(?, ?, ?, ?)', [item, department, price, quantity], (err, results)=>{
+		console.log(`YOU SUCCESSFULLY ADDED A NEW ITEM!`);
+		console.log('Item: '+item +'\n'+ 'Department: '+department+'\n'+ 'Price: $'+price+'\n'+ 'Stock: '+quantity+'\n-----------------');
+	})
 }
 
 let managerFunc = ()=>{
