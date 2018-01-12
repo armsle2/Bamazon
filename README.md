@@ -13,13 +13,13 @@ As a customer you will be able to view a list of products and make a choice on w
 ## Manager
 
 Manager mode allows you to:
-### View Products For Sale
+#### View Products For Sale
 	Simply view all products available for sale
-### View Low Inventory
+#### View Low Inventory
 	Run a check to see if there's any product with a quantity less than 5
-### Add To Inventory
+#### Add To Inventory
 	You can change the available quantity of an item
-### Add New Product
+#### Add New Product
 	Add a completely new product to the lineup
 
 ## Supervisor
