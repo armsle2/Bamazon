@@ -27,3 +27,17 @@ Supervisor access allows you to view the profitability of each department when y
 
 ## Demos
 
+#### Customer
+![bamcus1](https://user-images.githubusercontent.com/33161495/34858916-1c14017c-f721-11e7-8bb6-eb57640f320e.gif)
+![bamcus2](https://user-images.githubusercontent.com/33161495/34858915-1c090844-f721-11e7-9e0e-04a9cf64d030.gif)
+
+#### Manager
+
+![bamman1](https://user-images.githubusercontent.com/33161495/34858929-32bfa76e-f721-11e7-9866-5600b94eafde.gif)
+![bamman2](https://user-images.githubusercontent.com/33161495/34858928-32b0ec56-f721-11e7-87d8-af3db82223ed.gif)
+![bamman3](https://user-images.githubusercontent.com/33161495/34858927-32a6c6a4-f721-11e7-8259-93c05709d938.gif)
+
+#### Supervisor
+
+![bamsup1](https://user-images.githubusercontent.com/33161495/34858934-39affa4c-f721-11e7-98f0-26f59e4ab5e8.gif)
+![bamsup2](https://user-images.githubusercontent.com/33161495/34858933-39a45b38-f721-11e7-9554-1109ffa2c61b.gif)
