@@ -35,7 +35,7 @@ let askUser = (items)=>{
 		choices: ()=>{
 			let itemsArr = [];
 			items.forEach((results, index)=>{
-				itemsArr.push(`${results.item_id} '${results.product_name}'`);
+				itemsArr.push(`${results.item_id} '${results.product_name}' Price: $${results.price_usd}`);
 			});
 			return itemsArr;
 		},
