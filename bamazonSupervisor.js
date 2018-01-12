@@ -7,6 +7,7 @@ const connection = mysql.createConnection({
 	password: '',
 	database: 'bamazon'
 });
+const {table} = require('table');
 
 connection.connect(err=>{
 	if(err) throw err;
@@ -28,11 +29,7 @@ let displayPrompt = ()=>{
 				]).then(answers=>{
 					if(answers.options===`View Product Sales by Department`){
 						displaySales();
-					}else if(answers.options===`View Low Inventory`){
-						displayLowInventory();
-					}else if(answers.options===`Add To Inventory`){
-						updateQuantityPrompt(results);
-					}else if(answers.options===`Add New Product`){
+					}else if(answers.options===`Create New Department`){
 						addProductPrompt();
 					}
 				});
@@ -53,9 +50,15 @@ let displaySales = ()=>{
 		if(err){
 			console.log(err)
 		}else{
+			let data = [Object.keys(results[0])];
+ 
 			results.forEach((results, index)=>{
-				console.log('Department ID: '+results.department_id +'\n'+ 'Department: '+results.department_name+'\n'+ 'Over Head Costs: $'+results.over_head_costs+'\n'+ 'Product Sales: $'+results.product_sales+'\n'+ 'Total Profit: $'+results.total_profit+'\n-----------------');
+				data.push([results.department_id, results.department_name, results.over_head_costs, results.product_sales, results.total_profit]);
 			});
+			let output = table(data);
+
+			console.log(output);
+
 			mainMenuPrompt();
 		}
 	});
@@ -74,4 +77,44 @@ let mainMenuPrompt = ()=>{
 			process.exit();
 		}
 	})
+}
+
+let addDepartment = (department, overHead)=>{
+	connection.query('INSERT INTO departments(department_name, over_head_costs) VALUES(?, ?)', [department, overHead], (err, updateStatus)=>{
+		console.log(`YOU SUCCESSFULLY ADDED A NEW ITEM!`);
+		// console.log(results);
+		connection.query('SELECT * FROM departments', (err, results)=>{
+			let data = [Object.keys(results[0]), [updateStatus.insertId, department, overHead]];
+			let output = table(data);
+			console.log(output);
+			mainMenuPrompt();
+
+		})
+		
+		// console.log('Item: '+item +'\n'+ 'Department: '+department+'\n'+ 'Price: $'+price+'\n'+ 'Stock: '+quantity+'\n-----------------');
+	});
+}
+let addProductPrompt = ()=>{
+	inquirer.prompt([
+	{
+		name: 'department',
+		type: 'input',
+		message: 'Enter the name of the department you would like to create.'
+	}, {
+		name: 'overHead',
+		type: 'input',
+		message: 'Enter the overhead costs for this department .(ex 300)',
+		validate: (value)=>{
+			if(!isNaN(value)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}	
+	]).then(answers=>{
+		let department = answers.department;
+		let overHead = parseFloat(answers.overHead);
+		addDepartment(department, overHead);
+	})	
 }
