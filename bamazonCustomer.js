@@ -8,6 +8,8 @@ const connection = mysql.createConnection({
 	database: 'bamazon'
 });
 
+const {table} = require('table');
+
 connection.connect(err=>{
 	if(err) throw err;
 	console.log(`connected`);
@@ -19,9 +21,13 @@ let displayAllItems = (cb)=>{
 		if(err){
 			console.log(err)
 		}else{
+			let data = [Object.keys(results[0])];
+
 			results.forEach((results, index)=>{
-				console.log('Item: '+results.item_id +'\n'+ 'Product: '+results.product_name+'\n'+ 'Price: $'+results.price_usd+'\n-----------------');
+				data.push([results.item_id, results.product_name, results.price_usd]);
 			});
+			let output = table(data);
+			console.log(output);
 			cb(results);
 		}
 	});

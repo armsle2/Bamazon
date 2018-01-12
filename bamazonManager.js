@@ -50,7 +50,6 @@ let displayAllItems = ()=>{
 
 			results.forEach((results, index)=>{
 				data.push([results.item_id, results.product_name, results.price_usd]);
-				// console.log('Item: '+results.item_id +'\n'+ 'Product: '+results.product_name+'\n'+ 'Price: $'+results.price_usd+'\n-----------------');
 			});
 			let output = table(data);
 			console.log(output);
