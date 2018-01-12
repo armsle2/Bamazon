@@ -64,8 +64,8 @@ let checkInventory = (item, quantity)=>{
 			if (err) throw err;
 			if(quantity > results[0].stock_quantity){
 				if(results[0].stock_quantity > 0){
-				console.log(`Sorry man, we only have ${results[0].stock_quantity} in stock. Enter a different quantity.`)
-				setTimeout(()=>{displayAllItems(askUser)}, 2000);
+				console.log(`Sorry man, we only have ${results[0].stock_quantity} in stock.`)
+				changeOrderChoice(item);
 				}else{
 					console.log(`Sorry man, we're out of stock on this item.`);
 					orderChoice();
@@ -102,6 +102,39 @@ let orderChoice = ()=>{
 		message: 'Would you like to place another order?'
 	}]).then(answers=>{
 		if(answers.orderMore){
+			displayAllItems(askUser);
+		}else{
+			process.exit();
+		}
+	})
+}
+
+let changeOrderChoice = (item)=>{
+	inquirer.prompt([
+	{
+		type: 'list',
+		name: 'changeQuantity',
+		choices: ['Change Quantity', 'Go Back To Main Menu', 'Cancel Order'],
+		message: 'What would you like to do?'
+	}]).then(answers=>{
+		if(answers.changeQuantity==='Change Quantity'){
+			inquirer.prompt([{
+				name: 'quantity',
+				type: 'input',
+				message: 'How many would you like to buy?',
+				validate: (value)=>{
+					if(!isNaN(value)){
+						return true;
+					}else{
+						return false;
+					}
+				}
+			}]).then(answers=>{
+				let quantity = parseFloat(answers.quantity);
+				// let item = answers.item.split(`'`)[1];
+				checkInventory(item, quantity);
+			})
+		}else if(answers.changeQuantity==='Go Back To Main Menu'){
 			displayAllItems(askUser);
 		}else{
 			process.exit();
