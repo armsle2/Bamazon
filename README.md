@@ -8,7 +8,7 @@ There are three different levels of access for this storefront.
 
 ## Customer
 
-As a customer you will be able to view a list of products and make a choice on which product you want to buy and how much of that product you would like to buy. At the end you will be given a total for you choices you made. If the product is out of stock, Bamazon will tell you how much is left, if any, and you will be given the chance to order something else, enter a new quantity, or cancel altogther.
+	As a customer you will be able to view a list of products and make a choice on which product you want to buy and how much of that product you would like to buy. At the end you will be given a total for you choices you made. If the product is out of stock, Bamazon will tell you how much is left, if any, and you will be given the chance to order something else, enter a new quantity, or cancel altogther.
 
 ## Manager
 
